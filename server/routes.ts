@@ -1,16 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { setupAuth } from "./replit_integrations/auth"; // For Replit Auth
+import { setupAuth } from "./replit_integrations/auth";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import { insertProblemSchema } from "@shared/schema";
+import type { InsertProblem } from "@shared/schema";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Setup Replit Auth first
+  // Setup authentication first
   await setupAuth(app);
 
   // === API ROUTES ===
@@ -37,8 +37,8 @@ export async function registerRoutes(
        return res.status(401).json({ message: "Unauthorized" });
     }
     
-    // Get the user ID from the Replit Auth session
-    const userId = (req.user as any).id; // Or req.user.claims.sub depending on passport config
+    // Get the user ID from the authenticated session
+    const userId = (req.user as any).id;
 
     try {
       const input = api.submissions.create.input.parse(req.body);
@@ -91,8 +91,10 @@ export async function registerRoutes(
 
 async function seedDatabase() {
   const existingProblems = await storage.getProblems();
-  if (existingProblems.length === 0) {
-    await storage.createProblem({
+  const existingSlugs = new Set(existingProblems.map((problem) => problem.slug));
+
+  const defaultProblems: InsertProblem[] = [
+    {
       title: "Two Sum",
       slug: "two-sum",
       difficulty: "Easy",
@@ -124,9 +126,8 @@ Output: [0,1]
         { input: "nums = [3,2,4], target = 6", output: "[1,2]" }
       ],
       order: 1,
-    });
-
-    await storage.createProblem({
+    },
+    {
       title: "Valid Parentheses",
       slug: "valid-parentheses",
       difficulty: "Medium",
@@ -158,6 +159,113 @@ Output: false
         { input: 's = "()[]{}"', output: "true" }
       ],
       order: 2,
-    });
+    },
+    {
+      title: "Merge Two Sorted Lists",
+      slug: "merge-two-sorted-lists",
+      difficulty: "Easy",
+      category: "Linked List",
+      description: `You are given the heads of two sorted linked lists list1 and list2.
+
+Merge the two lists into one sorted list and return the head of the merged list.
+
+**Example 1:**
+Input: list1 = [1,2,4], list2 = [1,3,4]
+Output: [1,1,2,3,4,4]
+
+**Example 2:**
+Input: list1 = [], list2 = []
+Output: []
+`,
+      starterCode: `function mergeTwoLists(list1, list2) {
+  // Write your code here
+};`,
+      testCases: [
+        { input: "list1 = [1,2,4], list2 = [1,3,4]", output: "[1,1,2,3,4,4]" },
+        { input: "list1 = [], list2 = []", output: "[]" }
+      ],
+      order: 3,
+    },
+    {
+      title: "Best Time to Buy and Sell Stock",
+      slug: "best-time-to-buy-and-sell-stock",
+      difficulty: "Easy",
+      category: "Array",
+      description: `You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+Find the maximum profit you can achieve from a single buy and a single sell.
+
+**Example 1:**
+Input: prices = [7,1,5,3,6,4]
+Output: 5
+
+**Example 2:**
+Input: prices = [7,6,4,3,1]
+Output: 0
+`,
+      starterCode: `function maxProfit(prices) {
+  // Write your code here
+};`,
+      testCases: [
+        { input: "prices = [7,1,5,3,6,4]", output: "5" },
+        { input: "prices = [7,6,4,3,1]", output: "0" }
+      ],
+      order: 4,
+    },
+    {
+      title: "Maximum Subarray",
+      slug: "maximum-subarray",
+      difficulty: "Medium",
+      category: "Dynamic Programming",
+      description: `Given an integer array nums, find the contiguous subarray with the largest sum and return its sum.
+
+**Example 1:**
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+
+**Example 2:**
+Input: nums = [1]
+Output: 1
+`,
+      starterCode: `function maxSubArray(nums) {
+  // Write your code here
+};`,
+      testCases: [
+        { input: "nums = [-2,1,-3,4,-1,2,1,-5,4]", output: "6" },
+        { input: "nums = [1]", output: "1" }
+      ],
+      order: 5,
+    },
+    {
+      title: "Binary Search",
+      slug: "binary-search",
+      difficulty: "Easy",
+      category: "Binary Search",
+      description: `Given a sorted array of integers nums and an integer target, return the index of target if it exists, otherwise return -1.
+
+**Example 1:**
+Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4
+
+**Example 2:**
+Input: nums = [-1,0,3,5,9,12], target = 2
+Output: -1
+`,
+      starterCode: `function search(nums, target) {
+  // Write your code here
+};`,
+      testCases: [
+        { input: "nums = [-1,0,3,5,9,12], target = 9", output: "4" },
+        { input: "nums = [-1,0,3,5,9,12], target = 2", output: "-1" }
+      ],
+      order: 6,
+    },
+  ];
+
+  for (const problem of defaultProblems) {
+    if (!existingSlugs.has(problem.slug)) {
+      await storage.createProblem(problem);
+    }
   }
 }

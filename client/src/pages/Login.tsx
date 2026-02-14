@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Code2, Github } from "lucide-react";
+import { Github } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 
 export default function Login() {
@@ -32,8 +32,8 @@ export default function Login() {
 
           <Card className="border-border bg-card/50 backdrop-blur-xl shadow-2xl">
             <CardHeader className="text-center space-y-2">
-              <div className="mx-auto w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                <Code2 className="w-6 h-6 text-primary" />
+              <div className="mx-auto w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 overflow-hidden">
+                <img src="/Bajarang.jpg" alt="AnishCode Logo" className="w-full h-full object-cover rounded-lg scale-110" />
               </div>
               <CardTitle className="text-2xl font-bold font-display">Welcome Back</CardTitle>
               <CardDescription className="text-base">

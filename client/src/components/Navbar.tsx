@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Code2, Trophy, User, LogOut, Terminal } from "lucide-react";
+import { Trophy, User, LogOut, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,11 +21,11 @@ export function Navbar() {
     <nav className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container h-full mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2 font-display font-bold text-xl text-foreground hover:text-primary transition-colors">
-            <div className="p-1.5 bg-primary/10 rounded-lg">
-              <Code2 className="w-6 h-6 text-primary" />
+          <Link href="/" className="flex items-center gap-2 font-display font-bold text-xl text-amber-400 hover:text-amber-300 transition-colors">
+            <div className="w-10 h-10 p-1 bg-primary/10 rounded-lg overflow-hidden">
+              <img src="/Bajarang.jpg" alt="AnishCode Logo" className="w-full h-full object-cover rounded-md scale-110" />
             </div>
-            LeetClone
+            AnishCode
           </Link>
 
           <div className="hidden md:flex items-center gap-1">

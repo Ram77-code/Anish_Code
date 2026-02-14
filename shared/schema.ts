@@ -35,7 +35,7 @@ export const submissions = pgTable("submissions", {
 // === SCHEMAS ===
 
 export const insertProblemSchema = createInsertSchema(problems).omit({ id: true });
-export const insertSubmissionSchema = createInsertSchema(submissions).omit({ id: true, createdAt: true, status: true, runtime: true });
+export const insertSubmissionSchema = createInsertSchema(submissions).omit({ id: true, createdAt: true });
 
 // === TYPES ===
 
