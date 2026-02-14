@@ -1,10 +1,10 @@
 import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { users } from "./models/auth";
+import { users, sessions } from "./models/auth";
 
-// Re-export users from auth model so it can be used throughout the app
-export { users };
+// Re-export users and sessions from auth model so it can be used throughout the app
+export { users, sessions };
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
