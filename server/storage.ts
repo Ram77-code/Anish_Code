@@ -1,38 +1,61 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { users, problems, submissions, type User, type InsertUser, type Problem, type InsertProblem, type Submission, type InsertSubmission } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getProblems(): Promise<Problem[]>;
+  getProblem(id: number): Promise<Problem | undefined>;
+  createProblem(problem: InsertProblem): Promise<Problem>;
+
+  createSubmission(submission: InsertSubmission): Promise<Submission>;
+  getUserSubmissions(userId: string): Promise<(Submission & { problemTitle: string })[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
+export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
+
+  async getProblems(): Promise<Problem[]> {
+    return await db.select().from(problems).orderBy(problems.order);
+  }
+
+  async getProblem(id: number): Promise<Problem | undefined> {
+    const [problem] = await db.select().from(problems).where(eq(problems.id, id));
+    return problem;
+  }
+
+  async createProblem(problem: InsertProblem): Promise<Problem> {
+    const [newProblem] = await db.insert(problems).values(problem).returning();
+    return newProblem;
+  }
+
+  async createSubmission(submission: InsertSubmission): Promise<Submission> {
+    const [newSubmission] = await db.insert(submissions).values(submission).returning();
+    return newSubmission;
+  }
+
+  async getUserSubmissions(userId: string): Promise<(Submission & { problemTitle: string })[]> {
+    const result = await db
+      .select({
+        id: submissions.id,
+        userId: submissions.userId,
+        problemId: submissions.problemId,
+        code: submissions.code,
+        status: submissions.status,
+        runtime: submissions.runtime,
+        createdAt: submissions.createdAt,
+        problemTitle: problems.title,
+      })
+      .from(submissions)
+      .innerJoin(problems, eq(submissions.problemId, problems.id))
+      .where(eq(submissions.userId, userId))
+      .orderBy(desc(submissions.createdAt));
+    
+    return result;
+  }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
