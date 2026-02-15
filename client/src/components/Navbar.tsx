@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { useSubmissions } from "@/hooks/use-problems";
 import { Trophy, User, LogOut, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,10 +13,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Navbar() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { user, logout } = useAuth();
+  const { data: submissions } = useSubmissions();
 
   const isActive = (path: string) => location === path;
+  const solvedCount = user
+    ? new Set(
+        (submissions ?? [])
+          .filter((submission) => submission.status === "Accepted")
+          .map((submission) => submission.problemId)
+      ).size
+    : 0;
 
   return (
     <nav className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -23,9 +32,9 @@ export function Navbar() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 font-display font-bold text-xl text-amber-400 hover:text-amber-300 transition-colors">
             <div className="w-10 h-10 p-1 bg-primary/10 rounded-lg overflow-hidden">
-              <img src="/Bajarang.jpg" alt="AnishCode Logo" className="w-full h-full object-cover rounded-md scale-110" />
+              <img src="/Bajarang.jpg" alt="Anish_Space Logo" className="w-full h-full object-cover rounded-md scale-110" />
             </div>
-            AnishCode
+            Anish_Space
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
@@ -52,7 +61,7 @@ export function Navbar() {
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-accent/50 rounded-full border border-border">
                 <Trophy className="w-4 h-4 text-yellow-500" />
-                <span className="text-xs font-mono font-medium text-muted-foreground">0 Solved</span>
+                <span className="text-xs font-mono font-medium text-muted-foreground">{solvedCount} Solved</span>
               </div>
               
               <DropdownMenu>
@@ -74,11 +83,17 @@ export function Navbar() {
                     </div>
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => setLocation("/profile")}
+                  >
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => setLocation("/submissions")}
+                  >
                     <Terminal className="mr-2 h-4 w-4" />
                     <span>My Submissions</span>
                   </DropdownMenuItem>
@@ -95,7 +110,7 @@ export function Navbar() {
               <Link href="/login">
                 <Button variant="ghost" className="text-muted-foreground hover:text-foreground">Sign In</Button>
               </Link>
-              <Link href="/login">
+              <Link href="/register">
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20">
                   Register
                 </Button>
@@ -107,3 +122,4 @@ export function Navbar() {
     </nav>
   );
 }
+

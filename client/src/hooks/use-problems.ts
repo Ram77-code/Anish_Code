@@ -33,13 +33,31 @@ export function useProblem(id: number) {
 export function useSubmitSolution() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { code: string; problemId: number }) => {
+    mutationFn: async (data: {
+      code: string;
+      problemId: number;
+      language: "javascript" | "python";
+    }) => {
       const res = await apiRequest("POST", api.submissions.create.path, data);
       return api.submissions.create.responses[201].parse(await res.json());
     },
     onSuccess: (_, variables) => {
       // Invalidate submissions list
       queryClient.invalidateQueries({ queryKey: [api.submissions.list.path] });
+    },
+  });
+}
+
+// POST /api/submissions/run
+export function useRunCode() {
+  return useMutation({
+    mutationFn: async (data: {
+      code: string;
+      problemId: number;
+      language: "javascript" | "python";
+    }) => {
+      const res = await apiRequest("POST", api.submissions.run.path, data);
+      return api.submissions.run.responses[200].parse(await res.json());
     },
   });
 }

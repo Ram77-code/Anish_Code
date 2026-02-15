@@ -8,7 +8,8 @@ import { Navbar } from "@/components/Navbar";
 
 export default function Login() {
   const { user } = useAuth();
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
+  const isRegisterPage = location === "/register";
 
   useEffect(() => {
     if (user) {
@@ -33,11 +34,15 @@ export default function Login() {
           <Card className="border-border bg-card/50 backdrop-blur-xl shadow-2xl">
             <CardHeader className="text-center space-y-2">
               <div className="mx-auto w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 overflow-hidden">
-                <img src="/Bajarang.jpg" alt="AnishCode Logo" className="w-full h-full object-cover rounded-lg scale-110" />
+                <img src="/Bajarang.jpg" alt="Anish_Space Logo" className="w-full h-full object-cover rounded-lg scale-110" />
               </div>
-              <CardTitle className="text-2xl font-bold font-display">Welcome Back</CardTitle>
+              <CardTitle className="text-2xl font-bold font-display">
+                {isRegisterPage ? "Create Your Account" : "Welcome Back"}
+              </CardTitle>
               <CardDescription className="text-base">
-                Sign in to continue your coding journey
+                {isRegisterPage
+                  ? "Register to start your coding journey"
+                  : "Sign in to continue your coding journey"}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -45,12 +50,8 @@ export default function Login() {
                 onClick={handleLogin}
                 className="w-full h-12 bg-white text-black hover:bg-gray-100 font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
-                <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" 
-                  className="w-5 h-5 mr-3" 
-                  alt="Google"
-                />
-                Continue with Replit
+                <Github className="w-5 h-5 mr-3" />
+                {isRegisterPage ? "Continue with GitHub to Register" : "Continue with GitHub"}
               </Button>
               
               <div className="relative">
@@ -74,3 +75,4 @@ export default function Login() {
     </div>
   );
 }
+

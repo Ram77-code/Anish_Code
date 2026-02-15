@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { insertSubmissionSchema, insertProblemSchema, problems, submissions, users } from './schema';
+export const supportedLanguageSchema = z.enum(["javascript", "python"]);
 
 export const api = {
   problems: {
@@ -20,12 +21,39 @@ export const api = {
     },
   },
   submissions: {
+    run: {
+      method: 'POST' as const,
+      path: '/api/submissions/run' as const,
+      input: z.object({
+        code: z.string().min(1),
+        problemId: z.number(),
+        language: supportedLanguageSchema.default("javascript"),
+      }),
+      responses: {
+        200: z.object({
+          status: z.enum(["Accepted", "Wrong Answer", "Runtime Error"]),
+          runtime: z.number(),
+          passed: z.number(),
+          total: z.number(),
+          results: z.array(
+            z.object({
+              input: z.string(),
+              expected: z.string(),
+              actual: z.string().optional(),
+              passed: z.boolean(),
+              error: z.string().optional(),
+            }),
+          ),
+        }),
+      },
+    },
     create: {
       method: 'POST' as const,
       path: '/api/submissions' as const,
       input: z.object({
         code: z.string(),
         problemId: z.number(),
+        language: supportedLanguageSchema.default("javascript"),
       }),
       responses: {
         201: z.custom<typeof submissions.$inferSelect>(),
