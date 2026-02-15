@@ -5,7 +5,7 @@
     "license":  "MIT",
     "scripts":  {
                     "dev":  "set PORT=5002\u0026\u0026 set NODE_ENV=development\u0026\u0026 node --env-file=.env ./node_modules/tsx/dist/cli.mjs server/index.ts",
-                    "build":  "node ./node_modules/tsx/dist/cli.mjs script/build.ts",
+                    "build":  "node script/build.mjs",
                     "start":  "NODE_ENV=production node dist/index.cjs",
                     "check":  "node ./node_modules/typescript/bin/tsc",
                     "db:push":  "drizzle-kit push"
