@@ -84,12 +84,15 @@
                          "esbuild":  "^0.27.3",
                          "vite":  "^7.3.0",
                          "@vitejs/plugin-react":  "^4.7.0",
-                         "@replit/vite-plugin-runtime-error-modal":  "^0.0.3"
+                         "@replit/vite-plugin-runtime-error-modal":  "^0.0.3",
+                         "autoprefixer":  "^10.4.20",
+                         "postcss":  "^8.4.47",
+                         "tailwindcss":  "^3.4.17",
+                         "@tailwindcss/typography":  "^0.5.15"
                      },
     "devDependencies":  {
                             "@replit/vite-plugin-cartographer":  "^0.4.4",
                             "@replit/vite-plugin-dev-banner":  "^0.1.1",
-                            "@tailwindcss/typography":  "^0.5.15",
                             "@tailwindcss/vite":  "^4.1.18",
                             "@types/connect-pg-simple":  "^7.0.3",
                             "@types/express":  "^5.0.0",
@@ -100,11 +103,8 @@
                             "@types/react":  "^18.3.11",
                             "@types/react-dom":  "^18.3.1",
                             "@types/ws":  "^8.5.13",
-                            "autoprefixer":  "^10.4.20",
                             "cross-env":  "^10.1.0",
                             "drizzle-kit":  "^0.31.8",
-                            "postcss":  "^8.4.47",
-                            "tailwindcss":  "^3.4.17",
                             "tsx":  "^4.20.5",
                             "typescript":  "5.6.3"
                         },
