@@ -38,6 +38,15 @@
 <img width="1920" height="898" alt="Screenshot 2026-02-15 115042" src="https://github.com/user-attachments/assets/b8cbe281-7d62-4f1c-9095-e19f1a4d4d88" />
 <img width="1916" height="909" alt="Screenshot 2026-02-15 120516" src="https://github.com/user-attachments/assets/a237fef7-a05e-4e47-85a0-9b042826b89d" />
 
+## 🌐 Live Demo
+
+🎯 Check out the live version of the application here:
+
+👉 **🔗 https://anish-code.onrender.com/**
+
+Open the link above to explore the app in action — instantly and without installing anything!
+
+
 ### Clone the repository
 
 bash
