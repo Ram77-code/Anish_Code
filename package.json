@@ -6,7 +6,7 @@
     "scripts":  {
                     "dev":  "set PORT=5002\u0026\u0026 set NODE_ENV=development\u0026\u0026 node --env-file=.env ./node_modules/tsx/dist/cli.mjs server/index.ts",
                     "build":  "node script/build.mjs",
-                    "start":  "NODE_ENV=production node dist/index.cjs",
+                    "start":  "cross-env NODE_ENV=production node ./node_modules/tsx/dist/cli.mjs server/index.ts",
                     "check":  "node ./node_modules/typescript/bin/tsc",
                     "db:push":  "drizzle-kit push"
                 },
@@ -88,7 +88,9 @@
                          "autoprefixer":  "^10.4.20",
                          "postcss":  "^8.4.47",
                          "tailwindcss":  "^3.4.17",
-                         "@tailwindcss/typography":  "^0.5.15"
+                         "@tailwindcss/typography":  "^0.5.15",
+                         "tsx":  "^4.20.5",
+                         "cross-env":  "^10.1.0"
                      },
     "devDependencies":  {
                             "@replit/vite-plugin-cartographer":  "^0.4.4",
@@ -103,9 +105,7 @@
                             "@types/react":  "^18.3.11",
                             "@types/react-dom":  "^18.3.1",
                             "@types/ws":  "^8.5.13",
-                            "cross-env":  "^10.1.0",
                             "drizzle-kit":  "^0.31.8",
-                            "tsx":  "^4.20.5",
                             "typescript":  "5.6.3"
                         },
     "overrides":  {
